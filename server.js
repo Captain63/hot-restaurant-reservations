@@ -18,8 +18,29 @@ const reservations = [];
 // Table Waitlist Array (empty on initialization)
 const waitList = [];
 
-// Routes
+// Routes for serving HTML
 
+
+// Routes for serving Table data
+app.get('/api/reservations', (req, res) => {
+    // If there are no existing reservations, returns false for the client-side JS to then handle
+    if (reservations.length === 0) {
+        return res.json(false);
+    }
+
+    // Returns array of reservation objects for client-side JS to handle
+    return res.json(reservations);
+});
+
+app.get('/api/waitlist', (req, res) => {
+    // If there are no existing waitlist positions, returns false for the client-side JS to then handle
+    if (waitList.length === 0) {
+        return res.json(false);
+    }
+
+    // Returns array of waitlist positions for client-side JS to handle
+    return res.json(waitList);
+});
 
 // Logic for adding POST to reservations/wait list
 
