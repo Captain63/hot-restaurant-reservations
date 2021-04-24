@@ -21,36 +21,53 @@ const waitList = [];
 // Routes for serving HTML
 
 //Routes to display HTML pages
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'home.html')));
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "home.html")));
 
-app.get('/tables', (req, res) => res.sendFile(path.join(__dirname, 'tables.html')));
+app.get("/tables", (req, res) =>
+  res.sendFile(path.join(__dirname, "tables.html"))
+);
 
-app.get('/reserve', (req, res) => res.sendFile(path.join(__dirname, 'reserve.html')));
-
+app.get("/reserve", (req, res) =>
+  res.sendFile(path.join(__dirname, "reserve.html"))
+);
 
 // Routes for serving Table data
-app.get('/api/reservations', (req, res) => {
-    // If there are no existing reservations, returns false for the client-side JS to then handle
-    if (reservations.length === 0) {
-        return res.json(false);
-    }
+app.get("/api/reservations", (req, res) => {
+  // If there are no existing reservations, returns false for the client-side JS to then handle
+  if (reservations.length === 0) {
+    return res.json(false);
+  }
 
-    // Returns array of reservation objects for client-side JS to handle
-    return res.json(reservations);
+  // Returns array of reservation objects for client-side JS to handle
+  return res.json(reservations);
 });
 
-app.get('/api/waitlist', (req, res) => {
-    // If there are no existing waitlist positions, returns false for the client-side JS to then handle
-    if (waitList.length === 0) {
-        return res.json(false);
-    }
+app.get("/api/waitlist", (req, res) => {
+  // If there are no existing waitlist positions, returns false for the client-side JS to then handle
+  if (waitList.length === 0) {
+    return res.json(false);
+  }
 
-    // Returns array of waitlist positions for client-side JS to handle
-    return res.json(waitList);
+  // Returns array of waitlist positions for client-side JS to handle
+  return res.json(waitList);
 });
 
 // Logic for adding POST to reservations/wait list
+app.post("/api/reservations", (req, res) => {
+  const newReservation = req.body;
 
+  newReservation.routeName = newReservation.name
+    .replace(`A-Z0-9.-`, "")
+    .toLowerCase();
+  console.log(newReservation);
+
+  if (reservations.length < 5) {
+    reservations.push(newReservation);
+  } else {
+    waitList.push(newReservation);
+  }
+  res.json(newReservation);
+});
 
 // Starts the server to begin listening
 app.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));
