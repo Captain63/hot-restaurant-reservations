@@ -20,6 +20,13 @@ const waitList = [];
 
 // Routes
 
+//Routes to display HTML pages
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'home.html')));
+
+app.get('/tables', (req, res) => res.sendFile(path.join(__dirname, 'tables.html')));
+
+app.get('/reserve', (req, res) => res.sendFile(path.join(__dirname, 'reserve.html')));
+
 
 // Logic for adding POST to reservations/wait list
 
